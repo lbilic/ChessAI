@@ -10,7 +10,7 @@ import os
 
 class ChessValueDataset(Dataset):
   def __init__(self):
-    dat = h5py.File(os.path.join("processed", "dataset2.h5"), 'r')
+    dat = h5py.File(os.path.join("processed", "dataset10M.h5"), 'r')
     self.X = dat['array_1']
     self.Y = dat['array_2']
     print("loaded", self.X.shape, self.Y.shape)
@@ -62,7 +62,7 @@ class Net(nn.Module):
     x = F.relu(self.d2(x))
     x = F.relu(self.d3(x))
 
-    x = x.view(-1, 1, 128)
+    x = x.view(-1, 128)
     x = self.last(x)
 
     # value output
@@ -82,6 +82,7 @@ if __name__ == "__main__":
     model.cuda()
 
   model.train()
+  f = open("log.txt", "a+")
 
   for epoch in range(100):
     all_loss = 0
@@ -103,6 +104,9 @@ if __name__ == "__main__":
         
         all_loss += loss.item()
         num_loss += 1
+        print("%d out of %d , %3d: %f" % (batch_idx, len(train_loader), epoch, all_loss/num_loss))
 
     print("%3d: %f" % (epoch, all_loss/num_loss))
-    torch.save(model.state_dict(), os.path.join("nets", "value2.pth"))
+    f.write("%3d: %f\n" % (epoch, all_loss/num_loss))
+    torch.save(model.state_dict(), os.path.join("nets", "value4.pth"))
+  f.close()

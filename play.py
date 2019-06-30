@@ -10,7 +10,7 @@ import time
 
 class Evaluator(object):
     def __init__(self):
-        values = torch.load("nets/value.pth", map_location=lambda storage, loc: storage)
+        values = torch.load("nets/value4.pth", map_location=lambda storage, loc: storage)
         self.model = Net()
         self.model.load_state_dict(values)
 

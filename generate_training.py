@@ -8,9 +8,9 @@ import h5py
 def get_dataset(num_samples=None):
     #X, Y = [], []
     idx = 0
-    with h5py.File(os.path.join('processed', 'dataset2.h5'), 'w') as f:
-        d1 = f.create_dataset('array_1',(30000000, 5, 8, 8))
-        d2 = f.create_dataset('array_2',(30000000, 1))
+    with h5py.File(os.path.join('processed', 'dataset10M.h5'), 'w') as f:
+        d1 = f.create_dataset('array_1',(10000000, 5, 8, 8))
+        d2 = f.create_dataset('array_2', (10000000, 1))
         gn = 0
         values = {'1/2-1/2': 0, '0-1': -1, '1-0': 1}
         for fn in os.listdir(os.path.join("dataset", "PGN")):
@@ -30,11 +30,13 @@ def get_dataset(num_samples=None):
                     d1[idx] = ser
                     d2[idx] = value
                     idx += 1
-                    #X.append(ser)
-                    #Y.append(value)
+                #X.append(ser)
+                #Y.append(value)
                 print("parsing game %d, got %d examples" % (gn, idx))
-                #if num_samples is not None and len(X) > num_samples:
-                #    return X,Y
+                if(idx == 10000000):
+                    break
+            #if num_samples is not None and len(X) > num_samples:
+                #return X,Y
                 gn += 1
     #X = np.array(X)
     #Y = np.array(Y)
@@ -42,5 +44,5 @@ def get_dataset(num_samples=None):
 
 if __name__ == '__main__':
     get_dataset()
-    #X, Y = get_dataset()
+    #X, Y = get_dataset(10000000)
     #np.savez("processed/dataset.npz", X, Y)
